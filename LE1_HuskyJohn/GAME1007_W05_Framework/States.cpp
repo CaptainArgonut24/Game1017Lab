@@ -46,8 +46,8 @@ GameState::GameState() {}
 void GameState::Enter()
 {
 	cout << " Entering GameState " << endl;
-	m_sfx.emplace("track", Mix_LoadWAV("../Assets/aud/mixkit.wav"));
-	m_Music.emplace("jump", Mix_LoadWAV("../Assets/aud/mixkit.wav"));
+	m_sfx.emplace("track", Mix_LoadWAV("../Assets/aud/NS.mp3"));
+	m_Music.emplace("jump", Mix_LoadWAV("../Assets/aud/BOT.mp3"));
 	// Load sfk tracks and add them to map (x2)
 	// Load music trrack, and add it to map
 	//And play it;
