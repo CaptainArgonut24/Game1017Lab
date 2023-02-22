@@ -31,14 +31,17 @@ void Ship::Update()
 	if (EVMA::KeyHeld(SDL_SCANCODE_A))
 	{
 		m_angle -= m_rotSpeed; // Counter-Clockwsie
+		cout << "Moving Counter-Clockwsie \n";
 	} else if (EVMA::KeyHeld(SDL_SCANCODE_D))
 	{
 		m_angle += m_rotSpeed;
+		cout << "Moving Clockwsie \n";
 	}
 	// Teleport ship. New requirement for Lab 3.
 	if (EVMA::KeyPressed(SDL_SCANCODE_T))
 	{
 		TeleportShip();
+		cout << "Teli \n";
 	}
 	// Spawn bullet.
 	if (EVMA::MousePressed(1))
@@ -55,6 +58,7 @@ void Ship::Update()
 		{
 			SetAnimation(STATE_MOVING, 2, 0, 4);
 			SOMA::PlaySound("engines", -1, 15); // Reserving sound loop on channel 15.
+			cout << "Moveing Up \n";
 		}
 		break;
 	case STATE_MOVING:
@@ -70,6 +74,7 @@ void Ship::Update()
 		{
 			SetAnimation(STATE_IDLING, 1, 0, 1);
 			SOMA::StopSound(15);
+			cout << "Moving Check \n";
 		}
 		break;
 	}

@@ -188,11 +188,13 @@ void GameState::Update()
 	if (EVMA::KeyPressed(SDL_SCANCODE_X))
 	{
 		STMA::ChangeState(new TitleState()); // Change to new TitleState
+		cout << "new TitleState \n";
 		return;
 	}
 	else if (EVMA::KeyPressed(SDL_SCANCODE_P))
 	{
 		STMA::PushState(new PauseState()); // Add new PauseState
+		cout << "Game Pause\n";
 		return;
 	}
 	// Check collision.
