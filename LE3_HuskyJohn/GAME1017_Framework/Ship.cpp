@@ -49,6 +49,8 @@ void Ship::Update()
 		BulletPool* bulletStorage = dynamic_cast<BulletPool*>(STMA::CurrentState()->GetChild("bullets"));
 		bulletStorage->Fire(GetCenter(), m_angle);
 		SOMA::PlaySound("fire");
+		cout << "Bullet fired \n";
+
 	}
 	// Checking animation states.
 	switch(m_state)
