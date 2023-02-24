@@ -53,9 +53,9 @@ void GameState::Enter() // Initializing everything
 	plrCanShoot = true;
 
 	// Putting the textures into the map
-	textures.emplace("player", IMG_LoadTexture(engine_renderer, "../Assets/img/seal.png"));
+	textures.emplace("player", IMG_LoadTexture(engine_renderer, "../Assets/img/ship.png"));
 	textures.emplace("background", IMG_LoadTexture(engine_renderer, "../Assets/img/background.png"));
-	textures.emplace("playerBullet", IMG_LoadTexture(engine_renderer, "../Assets/img/ice1.png"));
+	textures.emplace("playerBullet", IMG_LoadTexture(engine_renderer, "../Assets/img/Bul.png"));
 	textures.emplace("enemy", IMG_LoadTexture(engine_renderer, "../Assets/img/enemy.png"));
 
 	// Error checking the textures
