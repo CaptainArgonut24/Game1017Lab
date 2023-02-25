@@ -14,9 +14,13 @@ void TitleState::Enter()
 {
 	std::cout << "Entering TitleState!" << std::endl;
 
-	Mix_VolumeMusic(36);
+	Mix_VolumeMusic(50);
 
 	Mix_PlayMusic(Engine::backgroundMusic["titleMusic"], -1);
+	CButton::SetPosition(512, 128);
+	CButton::SetEnabled(true);
+
+	m_background = IMG_LoadTexture(Engine::Instance().GetRenderer(), "../Assets/img/menuBackground.png");
 }
 
 void TitleState::Update()
@@ -33,7 +37,8 @@ void TitleState::Render()
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 255, 255);
 	SDL_RenderClear(Engine::Instance().GetRenderer());
 
-	// Any unique rendering in TitleState goes here ...
+	SDL_RenderCopyF(Engine::Instance().GetRenderer(), m_background, NULL, &m_bg1);
+
 }
 
 void TitleState::Exit()
@@ -54,9 +59,10 @@ void GameState::Enter() // Initializing everything
 
 	// Putting the textures into the map
 	textures.emplace("player", IMG_LoadTexture(engine_renderer, "../Assets/img/ship.png"));
-	textures.emplace("background", IMG_LoadTexture(engine_renderer, "../Assets/img/background.png"));
+	textures.emplace("background", IMG_LoadTexture(engine_renderer, "../Assets/img/background.jpg"));
 	textures.emplace("playerBullet", IMG_LoadTexture(engine_renderer, "../Assets/img/Bul.png"));
 	textures.emplace("enemy", IMG_LoadTexture(engine_renderer, "../Assets/img/enemy.png"));
+	textures.emplace("error", IMG_LoadTexture(engine_renderer, "../Assets/img/error.png"));
 
 	// Error checking the textures
 	for (std::pair<string, SDL_Texture*> texture : textures)
@@ -68,9 +74,10 @@ void GameState::Enter() // Initializing everything
 	}
 
 	// Putting the sounds into the map
-	m_sfx.emplace("playerShoot", Mix_LoadWAV("../Assets/mus/plrShoot.wav"));
-	m_sfx.emplace("enemyShoot", Mix_LoadWAV("../Assets/mus/enemyShoot.wav"));
-	m_sfx.emplace("collision", Mix_LoadWAV("../Assets/mus/collisionSound.wav"));
+	m_sfx.emplace("playerShoot", Mix_LoadWAV("../Assets/mus/Drainage.mp3"));
+	m_sfx.emplace("enemyShoot", Mix_LoadWAV("../Assets/mus/enemyShoot.mp3"));
+	m_sfx.emplace("collision", Mix_LoadWAV("../Assets/mus/explosion.mp3"));
+	m_sfx.emplace("Fail", Mix_LoadWAV("../Assets/mus/cant_get_it.mp3"));
 
 	// Error checking sounds...... (maybe no errors?)
 	for (std::pair<string, Mix_Chunk*> soundFX : m_sfx) 
@@ -261,6 +268,7 @@ void GameState::Update()
 	{
 		std::cout << "Changing to EndState" << std::endl;
 		STMA::ChangeState(new EndState());
+
 	}
 }
 
@@ -355,6 +363,7 @@ PauseState::PauseState() {}
 void PauseState::Enter()
 {
 	std::cout << "Entering PauseState" << std::endl;
+	CButton::SetPosition(615, 500);
 }
 
 void PauseState::Update()
@@ -362,6 +371,10 @@ void PauseState::Update()
 	if (Engine::Instance().KeyDown(SDL_SCANCODE_R))
 	{
 		STMA::PopState();
+		CButton::SetEnabled(false);
+	} else
+	{
+		CButton::SetEnabled(true);
 	}
 }
 
@@ -370,7 +383,7 @@ void PauseState::Render()
 	STMA::GetStates().front()->Render(); // Basically, renders the GameState as well that has not been booted out yet of the vector
 	SDL_SetRenderDrawBlendMode(Engine::Instance().GetRenderer(), SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 0, 0, 128); // Making window transparent
-	SDL_Rect pause_rect = { (WIDTH / 2), (HEIGHT / 2), 512, 512 };
+	SDL_Rect pause_rect = { 512, 128, 512, 512 };
 	SDL_RenderFillRect(Engine::Instance().GetRenderer(), &pause_rect);
 }
 
@@ -382,13 +395,16 @@ EndState::EndState() {}
 
 void EndState::Enter()
 {
+	CButton::ChangeButton(END);
+	CButton::SetPosition(500, 500);
+	CButton::SetEnabled(true);
 }
 
 void EndState::Update()
 {
 	if (Engine::Instance().KeyDown(SDL_SCANCODE_R))
 	{
-		STMA::ChangeState(new TitleState);
+		STMA::ChangeState(new TitleState());
 	}
 }
 

@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include "StateManager.h"
+#include "Button.h"
 
 using namespace std;
 
@@ -16,7 +17,7 @@ int Engine::Run()
 	{
 		return 1; // 1 arbitrarily means that engine is already running.
 	}
-	if (Init("GAME1017_L1", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, NULL))
+	if (Init("GAME1017_A1", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, NULL))
 	{
 		return 2; // 2 arbitrarily means that something went wrong in init.
 	}
@@ -61,11 +62,12 @@ int Engine::Init(const char* title, const int xPos, const int yPos,
 		Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 2048);
 		Mix_AllocateChannels(16);
 		// Load background music
-		backgroundMusic.emplace("titleMusic", Mix_LoadMUS("../Assets/mus/titleMusic.mp3"));
-		backgroundMusic.emplace("playMusic", Mix_LoadMUS("../Assets/mus/bgMusic.mp3"));
+		backgroundMusic.emplace("titleMusic", Mix_LoadMUS("../Assets/mus/start.mp3"));
+		backgroundMusic.emplace("playMusic", Mix_LoadMUS("../Assets/mus/Ballpoint.mp3"));
+		
 
 		// Ensuring the background music has no errors
-		for (pair<string, Mix_Music*> bgMusic : backgroundMusic)
+		for (const pair<string, Mix_Music*> bgMusic : backgroundMusic)
 		{
 			if (bgMusic.second == nullptr)
 			{
@@ -83,6 +85,8 @@ int Engine::Init(const char* title, const int xPos, const int yPos,
 	m_pKeystates = SDL_GetKeyboardState(nullptr);
 	lastFrameTime = chrono::high_resolution_clock::now();
 	m_isRunning = true; // Start your engine.
+
+	CButton::Init();
 
 	STMA::ChangeState(new TitleState());
 	return 0;
@@ -103,6 +107,10 @@ void Engine::HandleEvents()
 			// Keeping this here in case needed to revert
 			// if (event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
 			//
+			break;
+		case SDL_MOUSEMOTION:
+			m_mousePosition.x = static_cast<float>(event.motion.x);
+			m_mousePosition.y = static_cast<float>(event.motion.y);
 			break;
 		}
 	}
