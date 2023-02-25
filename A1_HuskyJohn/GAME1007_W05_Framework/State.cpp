@@ -2,6 +2,7 @@
 #include "StateManager.h"
 #include <iostream>
 
+
 void State::Render()
 {
 	SDL_RenderPresent(Engine::Instance().GetRenderer());
@@ -14,10 +15,10 @@ void TitleState::Enter()
 {
 	std::cout << "Entering TitleState!" << std::endl;
 
-	Mix_VolumeMusic(50);
+	Mix_VolumeMusic(100);
 
 	Mix_PlayMusic(Engine::backgroundMusic["titleMusic"], -1);
-	CButton::SetPosition(512, 128);
+	CButton::SetPosition(700, 300);
 	CButton::SetEnabled(true);
 
 	m_background = IMG_LoadTexture(Engine::Instance().GetRenderer(), "../Assets/img/menuBackground.png");
@@ -77,10 +78,10 @@ void GameState::Enter() // Initializing everything
 	m_sfx.emplace("playerShoot", Mix_LoadWAV("../Assets/mus/Drainage.mp3"));
 	m_sfx.emplace("enemyShoot", Mix_LoadWAV("../Assets/mus/enemyShoot.mp3"));
 	m_sfx.emplace("collision", Mix_LoadWAV("../Assets/mus/explosion.mp3"));
-	m_sfx.emplace("Fail", Mix_LoadWAV("../Assets/mus/cant_get_it.mp3"));
+	m_sfx.emplace("fail", Mix_LoadWAV("../Assets/mus/cant.mp3"));
 
 	// Error checking sounds...... (maybe no errors?)
-	for (std::pair<string, Mix_Chunk*> soundFX : m_sfx) 
+	for (std::pair<string, Mix_Chunk*> soundFX : m_sfx)
 	{
 		if (soundFX.second == nullptr)
 		{
@@ -94,10 +95,11 @@ void GameState::Enter() // Initializing everything
 
 	m_scrollSpeed = 200.0f;
 
-	Mix_VolumeMusic(16);
+	Mix_VolumeMusic(50);
 
-	Mix_PlayMusic(Engine::backgroundMusic["playMusic"], -1);
+	Mix_PlayMusic(Engine::backgroundMusic["Ball"], -1);
 }
+
 
 void GameState::Update()
 {
@@ -195,6 +197,8 @@ void GameState::Update()
 		// If collision with player
 		else if (SDL_HasIntersectionF(Engine::m_enemyBulletVec[i]->GetRect(), m_ship->GetDst())) {
 			Mix_PlayChannel(-1, m_sfx["collision"], 0);
+			Mix_PlayChannel(-1, m_sfx["fail"], 0);
+
 			delete Engine::m_enemyBulletVec[i];
 			Engine::m_enemyBulletVec[i] = nullptr;
 
@@ -203,6 +207,9 @@ void GameState::Update()
 
 			plrCanShoot = false;
 			delete m_ship;
+			std::cout << "Changing to EndState" << std::endl;
+			STMA::ChangeState(new EndState());
+
 		}
 		else {
 			(Engine::m_enemyBulletVec[i])->Update(Engine::Instance().GetDeltaTime());
@@ -212,12 +219,16 @@ void GameState::Update()
 	for (int i = 0; i < m_enemyVec.size(); i++) {
 		if (SDL_HasIntersectionF(m_enemyVec[i]->GetDst(), m_ship->GetDst())) {
 			Mix_PlayChannel(-1, m_sfx["collision"], 0);
+			
 			delete m_enemyVec[i];
 			m_enemyVec[i] = nullptr;
 			m_enemyVec.erase(m_enemyVec.begin() + i);
 			m_enemyVec.shrink_to_fit();
 			plrCanShoot = false;
 			delete m_ship;
+			std::cout << "Changing to EndState" << std::endl;
+			STMA::ChangeState(new EndState());
+
 		}
 	}
 
@@ -364,6 +375,7 @@ void PauseState::Enter()
 {
 	std::cout << "Entering PauseState" << std::endl;
 	CButton::SetPosition(615, 500);
+
 }
 
 void PauseState::Update()
@@ -391,13 +403,19 @@ void PauseState::Exit()
 {
 }
 
-EndState::EndState() {}
+EndState::EndState()
+{
+	
+}
 
 void EndState::Enter()
 {
 	CButton::ChangeButton(END);
 	CButton::SetPosition(500, 500);
 	CButton::SetEnabled(true);
+
+	//Mix_PlayChannel(-1, m_sfx["collision"], 0);
+
 }
 
 void EndState::Update()

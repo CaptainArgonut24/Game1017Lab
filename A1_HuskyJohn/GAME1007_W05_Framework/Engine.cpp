@@ -63,7 +63,7 @@ int Engine::Init(const char* title, const int xPos, const int yPos,
 		Mix_AllocateChannels(16);
 		// Load background music
 		backgroundMusic.emplace("titleMusic", Mix_LoadMUS("../Assets/mus/start.mp3"));
-		backgroundMusic.emplace("playMusic", Mix_LoadMUS("../Assets/mus/Ballpoint.mp3"));
+		backgroundMusic.emplace("Ball", Mix_LoadMUS("../Assets/mus/Ballpoint.mp3"));
 		
 
 		// Ensuring the background music has no errors
