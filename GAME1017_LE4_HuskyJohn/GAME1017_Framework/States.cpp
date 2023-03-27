@@ -156,9 +156,9 @@ void GameState::Enter()
 	TEMA::Load("../Assets/img/Player.png", "player");
 	TEMA::Load("../Assets/img/Tiles.png", "tiles");
 	SOMA::Load("../Assets/aud/Jump.wav", "jump", SOUND_SFX);
-	SOMA::Load("../Assets/aud/Guile.mp3", "guile", SOUND_MUSIC);
+	SOMA::Load("../Assets/aud/LB.mp3", "guile", SOUND_MUSIC);
 	SOMA::SetSoundVolume(32);
-	SOMA::SetMusicVolume(16);
+	SOMA::SetMusicVolume(100);
 	SOMA::PlayMusic("guile", -1, 2000);
 
 	AddChild("level", new TiledLevel(24,32,32,32,
