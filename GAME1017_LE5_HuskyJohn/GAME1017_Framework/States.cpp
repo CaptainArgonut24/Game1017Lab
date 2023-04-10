@@ -3,12 +3,12 @@
 #include "StateManager.h"
 // GameObject includes.
 #include "Button3.h"
+#include "ObstacleRow.h"
 #include "Primitives.h"
-#include "PlatformPlayer.h"
-#include "TiledLevel.h"
 // Remaining managers.
 #include "CollisionManager.h"
 #include "EventManager.h"
+#include "FontManager.h"
 #include "RenderManager.h"
 #include "SoundManager.h"
 #include "TextureManager.h"
@@ -98,7 +98,7 @@ void TitleState::Update()
 
 void TitleState::Render()
 {
-	SDL_SetRenderDrawColor(REMA::GetRenderer(), 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(REMA::GetRenderer(), 32, 0, 0, 255);
 	SDL_RenderClear(REMA::GetRenderer());
 	State::Render();
 }
@@ -117,6 +117,8 @@ PauseState::PauseState() = default;
 void PauseState::Enter()
 {
 	cout << "Entering PauseState..." << endl;
+	FOMA::Load("../Assets/img/ltype.TTF", "ltype24", 24);
+	AddChild("pauseText", new Label("ltype24", 325, 175, "Paused - press R to resume"));
 }
 
 void PauseState::Update()
@@ -134,7 +136,7 @@ void PauseState::Render()
 	// First render the GameState
 	STMA::GetStates().front()->Render();
 	// Now render rest of PauseState
-	SDL_SetRenderDrawColor(REMA::GetRenderer(), 0, 0, 255, 128);
+	SDL_SetRenderDrawColor(REMA::GetRenderer(), 64, 0, 0, 128);
 	SDL_Rect rect = { 256, 128, 512, 512 };
 	SDL_RenderFillRect(REMA::GetRenderer(), &rect);
 	State::Render();
@@ -153,19 +155,7 @@ GameState::GameState() = default;
 void GameState::Enter()
 {
 	cout << "Entering GameState..." << endl;
-	TEMA::Load("../Assets/img/Player.png", "player");
-	TEMA::Load("../Assets/img/Tiles.png", "tiles");
-	SOMA::Load("../Assets/aud/Jump.wav", "jump", SOUND_SFX);
-	SOMA::Load("../Assets/aud/LB.mp3", "guile", SOUND_MUSIC);
-	SOMA::SetSoundVolume(32);
-	SOMA::SetMusicVolume(100);
-	SOMA::PlayMusic("guile", -1, 2000);
-
-	AddChild("level", new TiledLevel(24,32,32,32,
-		"../Assets/dat/Tiledata.txt", "../Assets/dat/Level1.txt", "tiles"));
-	//AddChild("platform", new Rectangle({ 0, 700, 1024, 25 }, true));
-
-	AddChild("player", new PlatformPlayer({ 0,0,0,0 }, { 128,576,64,64 }));
+	AddChild("obstacles", new ObstacleRow());
 }
 
 void GameState::Update()
@@ -183,38 +173,6 @@ void GameState::Update()
 	}
 	// Update objects first.
 	State::Update();
-	// Check collision.
-	PlatformPlayer* pp = static_cast<PlatformPlayer*>(GetChild("player"));
-	SDL_FRect* p = pp->GetDst(); // Copies address of player m_dst.
-	vector<Tile*>& obstacles = static_cast<TiledLevel*>(GetChild("level"))->GetObstacles();
-
-	for (int i = 0; i < obstacles.size(); i++)
-	{
-		SDL_FRect* t = obstacles[i]->GetDst();
-		if (COMA::AABBCheck(*p, *t)) // Collision check between player rect and platform rect.
-		{
-			if ((p->y + p->h) - (float)pp->GetVelY() <= t->y) // If bottom of player < top of platform in "previous frame"
-			{ // Colliding with top side of tile. Or collided from top.
-				pp->StopY();
-				pp->SetY(t->y - p->h);
-				pp->SetGrounded(true);
-			} else if (p->y - static_cast<float>(pp->GetVelY()) >= t->y + t->h)
-			{ // Colliding with bottom side of tile
-				pp->StopY();
-				pp->SetY(t->y + t->h);
-			} else if ((p->x + p->w) - static_cast<float>(pp->GetVelX()) <= t->x)
-			{ // Colliding with left side of tile
-				pp->StopX();
-				pp->SetX(t->x - p->w);
-			} else if (p->x - static_cast<float>(pp->GetVelX()) >= (t->x + t->w))
-			{ // Colliding with right side of tile
-				pp->StopX();
-				pp->SetX(t->x + t->w);
-			}
-		}
-		// End collision checks.
-	}
-	
 }
 
 void GameState::Render()
@@ -222,18 +180,11 @@ void GameState::Render()
 	SDL_SetRenderDrawColor(REMA::GetRenderer(), 0, 0, 0, 255);
 	SDL_RenderClear(REMA::GetRenderer());
 	State::Render();
-
 }
 
 void GameState::Exit()
 {
 	cout << "Exiting GameState..." << endl;
-	TEMA::Unload("player");
-	TEMA::Unload("tiles");
-	SOMA::StopSound();
-	SOMA::StopMusic();
-	SOMA::Unload("jump", SOUND_SFX);
-	SOMA::Unload("guile", SOUND_MUSIC);
 	State::Exit();
 }
 

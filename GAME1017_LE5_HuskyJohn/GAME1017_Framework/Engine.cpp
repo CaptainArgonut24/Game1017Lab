@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "CollisionManager.h"
 #include "EventManager.h"
+#include "FontManager.h"
 #include "RenderManager.h"
 #include "TextureManager.h"
 #include "SoundManager.h"
@@ -113,6 +114,7 @@ void Engine::Clean()
 	std::cout << "Cleaning up..." << std::endl;
 	STMA::Quit();
 	EVMA::Quit();
+	FOMA::Quit();
 	SOMA::Quit();
 	TEMA::Quit();
 	REMA::Quit();

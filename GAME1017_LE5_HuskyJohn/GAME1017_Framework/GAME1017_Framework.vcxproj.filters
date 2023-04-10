@@ -14,9 +14,6 @@
     <Filter Include="_Main">
       <UniqueIdentifier>{3dc0fad7-fbf6-4dc2-ab2a-c88e7de53feb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Animation">
-      <UniqueIdentifier>{9524c86b-92ce-4119-b399-cc634f154f07}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -61,14 +58,14 @@
     <ClCompile Include="DebugManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="PlatformPlayer.cpp">
+    <ClCompile Include="FontManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="ObstacleRow.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="TiledLevel.cpp">
+    <ClCompile Include="Obstacle.cpp">
       <Filter>GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Spritesheet.cpp">
-      <Filter>Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -111,20 +108,14 @@
     <ClInclude Include="DebugManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="PlatformPlayer.h">
+    <ClInclude Include="FontManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ObstacleRow.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="TiledLevel.h">
+    <ClInclude Include="Obstacle.h">
       <Filter>GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Frame.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Spritesheet.h">
-      <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
