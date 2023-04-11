@@ -6,9 +6,9 @@
 #include <map>
 
 enum CurrentObstacle {
-	GREEN_TREE,
-	BLUE_TREE,
-	HANGING_RED_TREE,
+	OP1,
+	OP2,
+	OP3,
 	NUM_OBSTACLES
 };
 

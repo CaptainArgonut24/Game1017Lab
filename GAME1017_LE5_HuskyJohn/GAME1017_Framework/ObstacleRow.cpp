@@ -12,7 +12,7 @@ ObstacleRow::ObstacleRow():m_gapCtr(0), m_gapMax(3)
 	m_obstacles.shrink_to_fit();
 
 	// Load the textures
-	TEMA::Load("../Assets/img/obstacles/Tilesets/trees.png", "obstacleSheet");
+	TEMA::Load("../Assets/img/obstacles/Tilesets/OTS.png", "obstacleSheet");
 
 }
 
@@ -35,13 +35,13 @@ void ObstacleRow::Update()
 					PickRandomObstacle();
 					switch (curObstacle)
 					{
-					case GREEN_TREE:
+					case OP1:
 						m_obstacles.push_back(new Obstacle({ m_obstacles.back()->GetPos().x + 128.0f, 384.0f, 128.0f, 168.0f }, true, new Image({ 0, 0, 110, 168 }, { 128 / 2, -(168 / 2), 110, 168 }, "obstacleSheet")));
 						break;
-					case BLUE_TREE:
+					case OP2:
 						m_obstacles.push_back(new Obstacle({ m_obstacles.back()->GetPos().x + 128.0f, 384.0f, 128.0f, 168.0f }, true, new Image({ 110, 164, 110, 168 }, { 128 / 2, -(168 / 2), 110, 168 }, "obstacleSheet")));
 						break;
-					case HANGING_RED_TREE:
+					case OP3:
 						m_obstacles.push_back(new Obstacle({ m_obstacles.back()->GetPos().x + 128.0f, 384.0f - 128.0f, 128.0f, 168.0f }, true, new Image({ 380, 356, 120, 184 }, { 128 / 2, -(184 / 2), 110, 184 }, "obstacleSheet")));
 						break;
 					}
